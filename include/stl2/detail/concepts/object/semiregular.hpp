@@ -49,6 +49,12 @@ STL2_OPEN_NAMESPACE {
 	template <class T>
 	concept bool Semiregular =
 		Copyable<T> && DefaultConstructible<T>;
+
+	template <class T>
+	concept bool MovableNotCopyable =
+		Movable<T> &&
+		!CopyConstructible<T>;
+
 } STL2_CLOSE_NAMESPACE
 
 #endif

@@ -70,7 +70,7 @@ STL2_OPEN_NAMESPACE {
 	//
 	template <class I>
 	concept bool WeaklyIncrementable =
-		Semiregular<I> &&
+		//(Semiregular<I>) &&
 		requires(I& i) {
 			typename iter_difference_t<I>;
 			{ ++i } -> Same<I&>&&;

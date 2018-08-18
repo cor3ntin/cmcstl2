@@ -414,7 +414,7 @@ STL2_OPEN_NAMESPACE {
 	//
 	template <class I>
 	concept bool Iterator =
-		detail::Dereferenceable<I&> && WeaklyIncrementable<I>;
+		detail::Dereferenceable<I&> && WeaklyIncrementable<I> && (Semiregular<I> || MovableNotCopyable<I>);
 		// Axiom?: i is non-singular iff it denotes an element
 		// Axiom?: if i equals j then i and j denote equal elements
 		// Axiom?: I{} is in the domain of copy/move construction/assignment
@@ -472,6 +472,7 @@ STL2_OPEN_NAMESPACE {
 	template <class I, class T>
 	concept bool OutputIterator =
 		Iterator<I> &&
+		MovableNotCopyable<I> &&
 		Writable<I, T> &&
 		requires(I& i, T&& t) {
 			*i++ = std::forward<T>(t);
@@ -480,22 +481,30 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// InputIterator [iterators.input]
 	//
+
+	template <class I>
+	concept bool ReadableIterator =
+		Iterator<I> &&
+		Readable<I>;
+
 	template <class I>
 	concept bool InputIterator =
-		Iterator<I> &&
-		Readable<I> &&
+		ReadableIterator<I> &&
+		MovableNotCopyable<I> &&
 		requires(I& i, const I& ci) {
 			typename iterator_category_t<I>;
 			DerivedFrom<iterator_category_t<I>, input_iterator_tag>;
 			i++;
 		};
 
+
 	///////////////////////////////////////////////////////////////////////////
 	// ForwardIterator [iterators.forward]
 	//
 	template <class I>
 	concept bool ForwardIterator =
-		InputIterator<I> &&
+		ReadableIterator<I> &&
+		Semiregular<I> &&
 		DerivedFrom<iterator_category_t<I>, forward_iterator_tag> &&
 		Incrementable<I> &&
 		Sentinel<I, I>;
