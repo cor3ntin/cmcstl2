@@ -24,7 +24,7 @@
 STL2_OPEN_NAMESPACE {
 	template <class I, class S, class Pred, class Proj = identity>
 	requires
-		InputIterator<__f<I>> &&
+		ReadableIterator<__f<I>> &&
 		Sentinel<__f<S>, __f<I>> &&
 		IndirectUnaryPredicate<
 			Pred, projected<__f<I>, Proj>>

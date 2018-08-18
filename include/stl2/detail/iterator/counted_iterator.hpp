@@ -129,7 +129,7 @@ STL2_OPEN_NAMESPACE {
 		friend constexpr iter_rvalue_reference_t<I>
 		iter_move(const counted_iterator& i)
 			noexcept(noexcept(__stl2::iter_move(i.current())))
-			requires InputIterator<I> {
+			requires ReadableIterator<I> {
 			return __stl2::iter_move(i.current());
 		}
 		template <IndirectlySwappable<I> I2>
@@ -144,7 +144,7 @@ STL2_OPEN_NAMESPACE {
 	struct readable_traits<counted_iterator<I>> {
 		using type = iter_value_t<I>;
 	};
-	template <InputIterator I>
+	template <ReadableIterator I>
 	struct iterator_category<counted_iterator<I>> {
 		using type = iterator_category_t<I>;
 	};

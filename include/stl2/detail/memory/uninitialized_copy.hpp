@@ -26,7 +26,7 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// uninitialized_copy [Extension]
 	//
-	template <InputIterator I, Sentinel<I> S, __NoThrowForwardIterator O>
+	template <ReadableIterator I, Sentinel<I> S, __NoThrowForwardIterator O>
 	[[deprecated]] tagged_pair<tag::in(I), tag::out(O)>
 	uninitialized_copy(I first, S last, O result)
 	requires
@@ -56,7 +56,7 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// uninitialized_copy [Extension]
 	//
-	template <InputIterator I, Sentinel<I> S1, __NoThrowForwardIterator O, __NoThrowSentinel<O> S2>
+	template <ReadableIterator I, Sentinel<I> S1, __NoThrowForwardIterator O, __NoThrowSentinel<O> S2>
 	requires
 		Constructible<iter_value_t<O>, iter_reference_t<I>>
 	tagged_pair<tag::in(I), tag::out(O)>
@@ -86,7 +86,7 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// uninitialized_copy_n [Extension]
 	//
-	template <InputIterator I, __NoThrowForwardIterator O>
+	template <ReadableIterator I, __NoThrowForwardIterator O>
 	requires
 		Constructible<iter_value_t<O>, iter_reference_t<I>>
 	tagged_pair<tag::in(I), tag::out(O)>

@@ -23,8 +23,8 @@
 // merge [alg.merge]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I1, Sentinel<I1> S1,
-		InputIterator I2, Sentinel<I2> S2,
+	template <ReadableIterator I1, Sentinel<I1> S1,
+		ReadableIterator I2, Sentinel<I2> S2,
 		class O, class Comp = less<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires

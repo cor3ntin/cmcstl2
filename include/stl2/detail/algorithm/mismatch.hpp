@@ -22,7 +22,7 @@
 // mismatch [mismatch]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I1, Sentinel<I1> S1, class I2,
+	template <ReadableIterator I1, Sentinel<I1> S1, class I2,
 		class Pred = equal_to<>, class Proj1 = identity, class Proj2 = identity>
 	[[deprecated]] tagged_pair<tag::in1(I1), tag::in2(std::decay_t<I2>)>
 	mismatch(I1 first1, S1 last1, I2&& first2_, Pred pred = Pred{},
@@ -41,8 +41,8 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first1), std::move(first2)};
 	}
 
-	template <InputIterator I1, Sentinel<I1> S1,
-		InputIterator I2, Sentinel<I2> S2, class Pred = equal_to<>,
+	template <ReadableIterator I1, Sentinel<I1> S1,
+		ReadableIterator I2, Sentinel<I2> S2, class Pred = equal_to<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectRelation<
@@ -66,7 +66,7 @@ STL2_OPEN_NAMESPACE {
 	mismatch(Rng1&& rng1, I2&& first2_, Pred pred = Pred{},
 		Proj1 proj1 = Proj1{}, Proj2 proj2 = Proj2{})
 	requires
-		InputIterator<std::decay_t<I2>> &&
+		ReadableIterator<std::decay_t<I2>> &&
 		!Range<I2> &&
 		IndirectRelation<Pred,
 			projected<iterator_t<Rng1>, Proj1>,

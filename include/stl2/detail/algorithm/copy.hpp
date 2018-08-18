@@ -20,7 +20,7 @@
 // copy [alg.copy]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, WeaklyIncrementable O>
+	template <ReadableIterator I, Sentinel<I> S, WeaklyIncrementable O>
 	requires
 		IndirectlyCopyable<I, O>
 	tagged_pair<tag::in(I), tag::out(O)>
@@ -44,7 +44,7 @@ STL2_OPEN_NAMESPACE {
 
 	// Extension: two-range copy
 	namespace ext {
-		template <InputIterator I1, Sentinel<I1> S1, Iterator I2, Sentinel<I2> S2>
+		template <ReadableIterator I1, Sentinel<I1> S1, Iterator I2, Sentinel<I2> S2>
 		requires
 			IndirectlyCopyable<I1, I2>
 		tagged_pair<tag::in(I1), tag::out(I2)>

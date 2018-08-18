@@ -24,7 +24,7 @@
 // partition_copy [alg.partitions]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, WeaklyIncrementable O1,
+	template <ReadableIterator I, Sentinel<I> S, WeaklyIncrementable O1,
 		WeaklyIncrementable O2, class Pred, class Proj = identity>
 	requires
 		IndirectlyCopyable<I, O1> &&

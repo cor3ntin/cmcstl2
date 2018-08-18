@@ -44,8 +44,8 @@ STL2_OPEN_NAMESPACE {
 	template <class I1, class I2, class Out, class R = less<>,
 		class P1 = identity, class P2 = identity>
 	concept bool Mergeable =
-		InputIterator<I1> &&
-		InputIterator<I2> &&
+		ReadableIterator<I1> &&
+		ReadableIterator<I2> &&
 		WeaklyIncrementable<Out> &&
 		IndirectlyCopyable<I1, Out> &&
 		IndirectlyCopyable<I2, Out> &&

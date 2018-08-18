@@ -21,7 +21,7 @@
 // none_of [alg.none_of]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, class Pred, class Proj = identity>
+	template <ReadableIterator I, Sentinel<I> S, class Pred, class Proj = identity>
 	requires
 		IndirectUnaryPredicate<
 			Pred, projected<I, Proj>>

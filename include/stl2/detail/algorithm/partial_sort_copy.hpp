@@ -28,7 +28,7 @@
 // partial_sort_copy [partial.sort.copy]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I1, Sentinel<I1> S1,
+	template <ReadableIterator I1, Sentinel<I1> S1,
 		RandomAccessIterator I2, Sentinel<I2> S2,
 		class Comp = less<>,
 		class Proj1 = identity, class Proj2 = identity>

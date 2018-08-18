@@ -24,7 +24,7 @@
 // copy_if [alg.copy]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, WeaklyIncrementable O,
+	template <ReadableIterator I, Sentinel<I> S, WeaklyIncrementable O,
 		class Pred, class Proj = identity>
 	requires
 		IndirectlyCopyable<I, O> &&

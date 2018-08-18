@@ -25,7 +25,7 @@
 // transform [alg.transform]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, WeaklyIncrementable O,
+	template <ReadableIterator I, Sentinel<I> S, WeaklyIncrementable O,
 		CopyConstructible F, class Proj = identity>
 	requires
 		Writable<O,
@@ -51,13 +51,13 @@ STL2_OPEN_NAMESPACE {
 			std::ref(op), std::ref(proj));
 	}
 
-	template <InputIterator I1, Sentinel<I1> S1, class I2, WeaklyIncrementable O,
+	template <ReadableIterator I1, Sentinel<I1> S1, class I2, WeaklyIncrementable O,
 		CopyConstructible F, class Proj1 = identity, class Proj2 = identity>
 	[[deprecated]] tagged_tuple<tag::in1(I1), tag::in2(std::decay_t<I2>), tag::out(O)>
 	transform(I1 first1, S1 last1, I2&& first2_, O result,
 		F op, Proj1 proj1 = Proj1{}, Proj2 proj2 = Proj2{})
 	requires
-		InputIterator<std::decay_t<I2>> && !Range<I2> &&
+		ReadableIterator<std::decay_t<I2>> && !Range<I2> &&
 		Writable<O,
 			indirect_result_t<F&,
 				projected<I1, Proj1>,
@@ -78,7 +78,7 @@ STL2_OPEN_NAMESPACE {
 	transform(Rng&& r1, I&& first2_, O result, F op,
 		Proj1 proj1 = Proj1{}, Proj2 proj2 = Proj2{})
 	requires
-		InputIterator<std::decay_t<I>> && !Range<I> &&
+		ReadableIterator<std::decay_t<I>> && !Range<I> &&
 		Writable<O,
 			indirect_result_t<F&,
 				projected<iterator_t<Rng>, Proj1>,
@@ -92,8 +92,8 @@ STL2_OPEN_NAMESPACE {
 			std::ref(proj2));
 	}
 
-	template <InputIterator I1, Sentinel<I1> S1,
-		InputIterator I2, Sentinel<I2> S2,
+	template <ReadableIterator I1, Sentinel<I1> S1,
+		ReadableIterator I2, Sentinel<I2> S2,
 		WeaklyIncrementable O, CopyConstructible F,
 		class Proj1 = identity, class Proj2 = identity>
 	requires

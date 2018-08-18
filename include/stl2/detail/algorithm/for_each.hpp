@@ -22,7 +22,7 @@
 // for_each [alg.for_each]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, class F, class Proj = identity>
+	template <ReadableIterator I, Sentinel<I> S, class F, class Proj = identity>
 	requires
 		IndirectUnaryInvocable<F, projected<I, Proj>>
 	tagged_pair<tag::in(I), tag::fun(F)>

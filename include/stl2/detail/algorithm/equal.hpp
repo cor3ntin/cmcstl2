@@ -21,7 +21,7 @@
 // equal [alg.equal]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I1, Sentinel<I1> S1, InputIterator I2,
+	template <ReadableIterator I1, Sentinel<I1> S1, ReadableIterator I2,
 		class Pred, class Proj1, class Proj2>
 	requires
 		IndirectlyComparable<I1, I2, Pred, Proj1, Proj2>
@@ -36,8 +36,8 @@ STL2_OPEN_NAMESPACE {
 		return true;
 	}
 
-	template <InputIterator I1, Sentinel<I1> S1,
-		InputIterator I2, Sentinel<I2> S2,
+	template <ReadableIterator I1, Sentinel<I1> S1,
+		ReadableIterator I2, Sentinel<I2> S2,
 		class Pred, class Proj1, class Proj2>
 	requires
 		IndirectlyComparable<I1, I2, Pred, Proj1, Proj2>
@@ -52,13 +52,13 @@ STL2_OPEN_NAMESPACE {
 		return first1 == last1 && first2 == last2;
 	}
 
-	template <InputIterator I1, Sentinel<I1> S1, class I2, class Pred = equal_to<>,
+	template <ReadableIterator I1, Sentinel<I1> S1, class I2, class Pred = equal_to<>,
 		class Proj1 = identity, class Proj2 = identity>
 	[[deprecated]] bool
 	equal(I1 first1, S1 last1, I2&& first2_, Pred pred = Pred{},
 		Proj1 proj1 = Proj1{}, Proj2 proj2 = Proj2{})
 	requires
-		InputIterator<std::decay_t<I2>> && !Range<I2> &&
+		ReadableIterator<std::decay_t<I2>> && !Range<I2> &&
 		IndirectlyComparable<I1, std::decay_t<I2>, Pred, Proj1, Proj2>
 	{
 		auto first2 = std::forward<I2>(first2_);
@@ -72,7 +72,7 @@ STL2_OPEN_NAMESPACE {
 	[[deprecated]] bool equal(Rng1&& rng1, I2&& first2_, Pred pred = Pred{},
 		Proj1 proj1 = Proj1{}, Proj2 proj2 = Proj2{})
 	requires
-		InputIterator<std::decay_t<I2>> && !Range<I2> &&
+		ReadableIterator<std::decay_t<I2>> && !Range<I2> &&
 		IndirectlyComparable<iterator_t<Rng1>, std::decay_t<I2>, Pred, Proj1, Proj2>
 	{
 		auto first2 = std::forward<I2>(first2_);
@@ -80,7 +80,7 @@ STL2_OPEN_NAMESPACE {
 			std::move(first2), pred, proj1, proj2);
 	}
 
-	template <InputIterator I1, Sentinel<I1> S1, InputIterator I2, Sentinel<I2> S2,
+	template <ReadableIterator I1, Sentinel<I1> S1, ReadableIterator I2, Sentinel<I2> S2,
 		class Pred = equal_to<>, class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectlyComparable<I1, I2, Pred, Proj1, Proj2>
@@ -93,7 +93,7 @@ STL2_OPEN_NAMESPACE {
 			pred, proj1, proj2);
 	}
 
-	template <InputIterator I1, SizedSentinel<I1> S1, InputIterator I2, SizedSentinel<I2> S2,
+	template <ReadableIterator I1, SizedSentinel<I1> S1, ReadableIterator I2, SizedSentinel<I2> S2,
 		class Pred = equal_to<>, class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectlyComparable<I1, I2, Pred, Proj1, Proj2>

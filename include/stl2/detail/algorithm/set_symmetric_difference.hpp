@@ -24,8 +24,8 @@
 // set_symmetric_difference [set.symmetric.difference]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I1, Sentinel<I1> S1,
-		InputIterator I2, Sentinel<I2> S2,
+	template <ReadableIterator I1, Sentinel<I1> S1,
+		ReadableIterator I2, Sentinel<I2> S2,
 		WeaklyIncrementable O, class Comp = less<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires

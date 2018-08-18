@@ -20,8 +20,8 @@
 // replace [alg.replace]
 //
 STL2_OPEN_NAMESPACE {
-	// Extension: Relax to InputIterator
-	template <InputIterator I, Sentinel<I> S, class T1, class T2,
+	// Extension: Relax to ReadableIterator
+	template <ReadableIterator I, Sentinel<I> S, class T1, class T2,
 		class Proj = identity>
 	requires
 		Writable<I, const T2&> &&

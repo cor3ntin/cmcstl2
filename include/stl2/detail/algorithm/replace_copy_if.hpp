@@ -20,7 +20,7 @@
 // replace_copy_if [alg.replace]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, class Pred, class T,
+	template <ReadableIterator I, Sentinel<I> S, class Pred, class T,
 		OutputIterator<const T&> O, class Proj = identity>
 	requires
 		IndirectlyCopyable<I, O> &&

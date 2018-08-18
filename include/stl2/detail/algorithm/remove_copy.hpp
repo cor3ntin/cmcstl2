@@ -22,7 +22,7 @@
 // remove_copy [alg.remove]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, WeaklyIncrementable O,
+	template <ReadableIterator I, Sentinel<I> S, WeaklyIncrementable O,
 		class T, class Proj = identity>
 	requires
 		IndirectlyCopyable<I, O> &&

@@ -21,7 +21,7 @@
 // count [alg.count]
 //
 STL2_OPEN_NAMESPACE {
-	template <InputIterator I, Sentinel<I> S, class T, class Proj = identity>
+	template <ReadableIterator I, Sentinel<I> S, class T, class Proj = identity>
 	requires
 		IndirectRelation<
 			equal_to<>, projected<I, Proj>, const T*>
