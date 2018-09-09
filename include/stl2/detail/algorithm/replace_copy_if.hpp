@@ -21,7 +21,7 @@
 //
 STL2_OPEN_NAMESPACE {
 	template <ReadableIterator I, Sentinel<I> S, class Pred, class T,
-		OutputIterator<const T&> O, class Proj = identity>
+		WritableIterator<const T&> O, class Proj = identity>
 	requires
 		IndirectlyCopyable<I, O> &&
 		IndirectUnaryPredicate<
@@ -41,9 +41,9 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first), std::move(result)};
 	}
 
-	template <InputRange Rng, class Pred, class T, class O, class Proj = identity>
+	template <ReadableRange Rng, class Pred, class T, class O, class Proj = identity>
 	requires
-		OutputIterator<__f<O>, const T&> &&
+		WritableIterator<__f<O>, const T&> &&
 		IndirectlyCopyable<iterator_t<Rng>, __f<O>> &&
 		IndirectUnaryPredicate<
 			Pred, projected<iterator_t<Rng>, Proj>>

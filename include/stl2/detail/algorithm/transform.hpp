@@ -39,7 +39,7 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first), std::move(result)};
 	}
 
-	template <InputRange R, WeaklyIncrementable O, CopyConstructible F, class Proj = identity>
+	template <ReadableRange R, WeaklyIncrementable O, CopyConstructible F, class Proj = identity>
 	requires
 		Writable<O,
 			indirect_result_t<F&, projected<iterator_t<R>, Proj>>>
@@ -70,7 +70,7 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first1), std::move(first2), std::move(result)};
 	}
 
-	template <InputRange Rng, class I, WeaklyIncrementable O, CopyConstructible F,
+	template <ReadableRange Rng, class I, WeaklyIncrementable O, CopyConstructible F,
 		class Proj1 = identity, class Proj2 = identity>
 	[[deprecated]]
 	tagged_tuple<tag::in1(safe_iterator_t<Rng>),
@@ -111,7 +111,7 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first1), std::move(first2), std::move(result)};
 	}
 
-	template <InputRange Rng1, InputRange Rng2, WeaklyIncrementable O, CopyConstructible F,
+	template <ReadableRange Rng1, ReadableRange Rng2, WeaklyIncrementable O, CopyConstructible F,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		Writable<O,

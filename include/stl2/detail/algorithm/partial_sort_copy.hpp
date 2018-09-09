@@ -60,7 +60,7 @@ STL2_OPEN_NAMESPACE {
 		return r;
 	}
 
-	template <InputRange Rng1, RandomAccessRange Rng2, class Comp = less<>,
+	template <ReadableRange Rng1, RandomAccessRange Rng2, class Comp = less<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectlyCopyable<iterator_t<Rng1>, iterator_t<Rng2>> &&

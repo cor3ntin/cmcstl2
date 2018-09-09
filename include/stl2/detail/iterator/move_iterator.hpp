@@ -25,7 +25,7 @@ STL2_OPEN_NAMESPACE {
 	Semiregular{S} class move_sentinel;
 
 	namespace __move_iterator {
-		InputIterator{I} class cursor;
+		ReadableIterator{I} class cursor;
 
 		struct access {
 			template <_SpecializationOf<cursor> C>
@@ -38,7 +38,7 @@ STL2_OPEN_NAMESPACE {
 			}
 		};
 
-		InputIterator{I}
+		ReadableIterator{I}
 		class cursor {
 			friend access;
 			I current_{};
@@ -180,7 +180,7 @@ STL2_OPEN_NAMESPACE {
 		};
 	}
 
-	InputIterator{I}
+	ReadableIterator{I}
 	using move_iterator = basic_iterator<__move_iterator::cursor<I>>;
 
 	template <class I>
@@ -219,7 +219,7 @@ STL2_OPEN_NAMESPACE {
 
 	template <class I>
 	requires
-		InputIterator<__f<I>>
+		ReadableIterator<__f<I>>
 	constexpr auto make_move_iterator(I&& i)
 	STL2_NOEXCEPT_RETURN(
 		move_iterator<__f<I>>{std::forward<I>(i)}

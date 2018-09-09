@@ -40,8 +40,8 @@ STL2_OPEN_NAMESPACE {
 		return first;
 	}
 
-	// Extension: Relax to InputRange
-	template <InputRange Rng, class T1, class T2, class Proj = identity>
+	// Extension: Relax to ReadableRange
+	template <ReadableRange Rng, class T1, class T2, class Proj = identity>
 	requires
 		Writable<iterator_t<Rng>, const T2&> &&
 		IndirectRelation<

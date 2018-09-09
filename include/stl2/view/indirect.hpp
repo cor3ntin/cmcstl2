@@ -25,7 +25,7 @@ STL2_OPEN_NAMESPACE {
 	namespace ext {
 		template <View Rng>
 		requires
-			InputRange<Rng> &&
+			ReadableRange<Rng> &&
 			Readable<remove_reference_t<iter_reference_t<iterator_t<Rng>>>>
 		class indirect_view
 		: public view_interface<indirect_view<Rng>>

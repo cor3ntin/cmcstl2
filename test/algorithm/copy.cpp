@@ -19,7 +19,7 @@
 
 namespace ranges = __stl2;
 
-template <ranges::InputIterator I>
+template <ranges::ReadableIterator I>
 	requires ranges::Regular<ranges::iter_value_t<I>>
 class delimiter {
 	ranges::iter_value_t<I> value_;

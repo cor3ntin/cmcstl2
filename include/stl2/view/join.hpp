@@ -24,7 +24,7 @@
 
 STL2_OPEN_NAMESPACE {
 	namespace detail {
-		template <InputRange Base>
+		template <ReadableRange Base>
 		struct join_view_iterator_base {
 			using iterator_category = __stl2::input_iterator_tag;
 		};
@@ -41,17 +41,17 @@ STL2_OPEN_NAMESPACE {
 			using iterator_category = __stl2::bidirectional_iterator_tag;
 		};
 
-		template <InputRange InnerRng>
+		template <ReadableRange InnerRng>
 		struct join_view_base {
 			all_view<InnerRng> inner_ {};
 		};
-		template <InputRange InnerRng>
+		template <ReadableRange InnerRng>
 		requires std::is_reference_v<InnerRng>
 		struct join_view_base<InnerRng> {};
 	}
 
-	template <InputRange Rng>
-	requires View<Rng> && InputRange<iter_reference_t<iterator_t<Rng>>> &&
+	template <ReadableRange Rng>
+	requires View<Rng> && ReadableRange<iter_reference_t<iterator_t<Rng>>> &&
 		(std::is_reference_v<iter_reference_t<iterator_t<Rng>>> ||
 			View<iter_value_t<iterator_t<Rng>>>)
 	class join_view
@@ -69,7 +69,7 @@ STL2_OPEN_NAMESPACE {
 		constexpr explicit join_view(Rng base)
 		: base_(std::move(base)) {}
 
-		template <InputRange O>
+		template <ReadableRange O>
 		requires ViewableRange<O> && _ConstructibleFromRange<Rng, O>
 		constexpr explicit join_view(O&& o)
 		: base_(view::all(std::forward<O>(o))) {}
@@ -85,7 +85,7 @@ STL2_OPEN_NAMESPACE {
 		// Template to work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82507
 		template <class ConstRng = const Rng>
 		constexpr const_iterator begin() const
-		requires InputRange<ConstRng> &&
+		requires ReadableRange<ConstRng> &&
 			std::is_reference_v<iter_reference_t<iterator_t<ConstRng>>>
 		{ return {*this, __stl2::begin(base_)}; }
 
@@ -95,7 +95,7 @@ STL2_OPEN_NAMESPACE {
 		// Template to work around https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82507
 		template <class ConstRng = const Rng>
 		constexpr const_sentinel end() const
-		requires InputRange<ConstRng> &&
+		requires ReadableRange<ConstRng> &&
 			std::is_reference_v<iter_reference_t<iterator_t<ConstRng>>>
 		{ return const_sentinel{*this}; }
 
@@ -117,8 +117,8 @@ STL2_OPEN_NAMESPACE {
 		{ return {*this, __stl2::end(base_)}; }
 	};
 
-	template <InputRange Rng>
-	requires InputRange<iter_reference_t<iterator_t<Rng>>> &&
+	template <ReadableRange Rng>
+	requires ReadableRange<iter_reference_t<iterator_t<Rng>>> &&
 		(std::is_reference_v<iter_reference_t<iterator_t<Rng>>> ||
 			View<iter_value_t<iterator_t<Rng>>>)
 	explicit join_view(Rng&&) -> join_view<all_view<Rng>>;
@@ -293,8 +293,8 @@ STL2_OPEN_NAMESPACE {
 
 	namespace view {
 		struct __join_fn : detail::__pipeable<__join_fn> {
-			template <InputRange Rng>
-			requires ViewableRange<Rng> && InputRange<iter_reference_t<iterator_t<Rng>>> &&
+			template <ReadableRange Rng>
+			requires ViewableRange<Rng> && ReadableRange<iter_reference_t<iterator_t<Rng>>> &&
 				(std::is_reference_v<iter_reference_t<iterator_t<Rng>>> ||
 					View<iter_value_t<iterator_t<Rng>>>)
 			constexpr auto operator()(Rng&& rng) const

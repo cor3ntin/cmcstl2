@@ -65,14 +65,14 @@ int main()
 		auto evens = [](int i) { return i % 2 == 0; };
 		std::stringstream sin{"0 1 2 3 4 5 6 7 8 9"};
 		my_subrange is{istream_iterator<int>{sin}, istream_iterator<int>{}};
-		static_assert(InputRange<decltype(is)>);
+		static_assert(ReadableRange<decltype(is)>);
 		auto rng = is | view::filter(evens) | view::take(3);
 		using R = decltype(rng);
 		static_assert(View<R>);
 		static_assert(!SizedRange<decltype(rng.base())>);
 		static_assert(!SizedRange<R>);
 		static_assert(!CommonRange<R>);
-		static_assert(InputRange<R>);
+		static_assert(ReadableRange<R>);
 		static_assert(!ForwardRange<R>);
 		static_assert(!Range<const R>);
 		CHECK_EQUAL(rng, {0,2,4});
@@ -89,7 +89,7 @@ int main()
 		static_assert(!SizedRange<decltype(rng.base())>);
 		static_assert(!SizedRange<R>);
 		static_assert(!CommonRange<R>);
-		static_assert(InputRange<R>);
+		static_assert(ReadableRange<R>);
 		static_assert(!ForwardRange<R>);
 		static_assert(!Range<const R>);
 		CHECK_EQUAL(rng, {1,3,5});

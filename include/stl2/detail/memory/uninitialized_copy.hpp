@@ -43,7 +43,7 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// uninitialized_copy [Extension]
 	//
-	template <InputRange Rng, __NoThrowForwardIterator O>
+	template <ReadableRange Rng, __NoThrowForwardIterator O>
 	[[deprecated]] tagged_pair<tag::in(safe_iterator_t<Rng>), tag::out(O)>
 	uninitialized_copy(Rng&& rng, O result)
 	requires
@@ -73,7 +73,7 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// uninitialized_copy [Extension]
 	//
-	template <InputRange IRng, __NoThrowForwardRange ORng>
+	template <ReadableRange IRng, __NoThrowForwardRange ORng>
 	requires
 		Constructible<iter_value_t<iterator_t<ORng>>, iter_reference_t<iterator_t<IRng>>>
 	tagged_pair<tag::in(safe_iterator_t<IRng>), tag::out(safe_iterator_t<ORng>)>

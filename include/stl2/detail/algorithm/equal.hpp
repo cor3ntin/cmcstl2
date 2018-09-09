@@ -67,7 +67,7 @@ STL2_OPEN_NAMESPACE {
 			std::move(first2), pred, proj1, proj2);
 	}
 
-	template <InputRange Rng1, class I2, class Pred = equal_to<>,
+	template <ReadableRange Rng1, class I2, class Pred = equal_to<>,
 		class Proj1 = identity, class Proj2 = identity>
 	[[deprecated]] bool equal(Rng1&& rng1, I2&& first2_, Pred pred = Pred{},
 		Proj1 proj1 = Proj1{}, Proj2 proj2 = Proj2{})
@@ -107,7 +107,7 @@ STL2_OPEN_NAMESPACE {
 				std::move(first2), pred, proj1, proj2);
 	}
 
-	template <InputRange Rng1, InputRange Rng2, class Pred = equal_to<>,
+	template <ReadableRange Rng1, ReadableRange Rng2, class Pred = equal_to<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectlyComparable<iterator_t<Rng1>, iterator_t<Rng2>, Pred, Proj1, Proj2>
@@ -120,7 +120,7 @@ STL2_OPEN_NAMESPACE {
 			pred, proj1, proj2);
 	}
 
-	template <InputRange Rng1, InputRange Rng2, class Pred = equal_to<>,
+	template <ReadableRange Rng1, ReadableRange Rng2, class Pred = equal_to<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		SizedRange<Rng1> && SizedRange<Rng2> &&

@@ -25,7 +25,7 @@
 //
 STL2_OPEN_NAMESPACE {
 	namespace __minmax {
-		template <InputRange Rng, class Comp = less<>, class Proj = identity>
+		template <ReadableRange Rng, class Comp = less<>, class Proj = identity>
 		requires
 			Copyable<iter_value_t<iterator_t<Rng>>> &&
 			IndirectStrictWeakOrder<
@@ -97,7 +97,7 @@ STL2_OPEN_NAMESPACE {
 		}
 	}
 
-	template <InputRange Rng, class Comp = less<>, class Proj = identity>
+	template <ReadableRange Rng, class Comp = less<>, class Proj = identity>
 	requires
 		Copyable<iter_value_t<iterator_t<Rng>>> &&
 		IndirectStrictWeakOrder<

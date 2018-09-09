@@ -475,9 +475,9 @@ void ridiculously_exhaustive_range_property_test() {
 
 #if VALIDATE_RANGES
 template <class I, class S,
-	CONCEPT_REQUIRES_(ranges::InputIterator<I> && ranges::Sentinel<S, I>)>
+	CONCEPT_REQUIRES_(ranges::ReadableIterator<I> && ranges::Sentinel<S, I>)>
 #elif VALIDATE_STL2
-template <ns::InputIterator I, ns::Sentinel<I> S>
+template <ns::ReadableIterator I, ns::Sentinel<I> S>
 #endif
 I complicated_algorithm(I i, S s) {
 	static constexpr bool output = false;
@@ -495,7 +495,7 @@ I complicated_algorithm(I i, S s) {
 #if VALIDATE_RANGES
 template <class R, CONCEPT_REQUIRES_(ranges::Range<R>)>
 #elif VALIDATE_STL2
-ns::InputRange{R}
+ns::ReadableRange{R}
 #endif
 ns::iterator_t<R> complicated_algorithm(R&& r) {
 	return complicated_algorithm(ns::begin(r), ns::end(r));
@@ -536,9 +536,9 @@ int main() {
 	{
 		using T = int[2];
 		CONCEPT_ASSERT(ranges::CommonRange<T>);
-		CONCEPT_ASSERT(ranges::OutputRange<T, int>);
-		CONCEPT_ASSERT(ranges::OutputRange<T, const int&>);
-		CONCEPT_ASSERT(ranges::InputRange<T>);
+		//CONCEPT_ASSERT(ranges::OutputRange<T, int>);
+		//CONCEPT_ASSERT(ranges::OutputRange<T, const int&>);
+		CONCEPT_ASSERT(ranges::ReadableRange<T>);
 		CONCEPT_ASSERT(ranges::ForwardRange<T>);
 		CONCEPT_ASSERT(ranges::BidirectionalRange<T>);
 		CONCEPT_ASSERT(ranges::RandomAccessRange<T>);

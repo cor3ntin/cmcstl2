@@ -35,7 +35,7 @@ STL2_OPEN_NAMESPACE {
 		return first;
 	}
 
-	template <InputRange Rng, class T, class Proj = identity>
+	template <ReadableRange Rng, class T, class Proj = identity>
 	requires
 		IndirectRelation<
 			equal_to<>, projected<iterator_t<Rng>, Proj>, const T*>

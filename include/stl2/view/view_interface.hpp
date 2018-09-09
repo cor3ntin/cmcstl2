@@ -38,7 +38,7 @@ STL2_OPEN_NAMESPACE {
 		template <class R>
 		concept bool SizedSentinelForwardRange = ForwardRange<R> && SizedSentinel<sentinel_t<R>, iterator_t<R>>;
 		template <class C, class R>
-		concept bool ContainerConvertible = InputRange<R> && ForwardRange<C> && !View<C> &&
+		concept bool ContainerConvertible = ReadableRange<R> && ForwardRange<C> && !View<C> &&
 			ConvertibleTo<iter_reference_t<iterator_t<R>>, iter_value_t<iterator_t<C>>> &&
 			Constructible<C, __range_common_iterator<R>, __range_common_iterator<R>>;
 

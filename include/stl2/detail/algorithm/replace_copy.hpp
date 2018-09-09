@@ -21,7 +21,7 @@
 //
 STL2_OPEN_NAMESPACE {
 	template <ReadableIterator I, Sentinel<I> S, class T1, class T2,
-		OutputIterator<const T2&> O, class Proj = identity>
+		WritableIterator<const T2&> O, class Proj = identity>
 	requires
 		IndirectlyCopyable<I, O> &&
 		IndirectRelation<
@@ -41,9 +41,9 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first), std::move(result)};
 	}
 
-	template <InputRange Rng, class T1, class T2, class O, class Proj = identity>
+	template <ReadableRange Rng, class T1, class T2, class O, class Proj = identity>
 	requires
-		OutputIterator<__f<O>, const T2&> &&
+		WritableIterator<__f<O>, const T2&> &&
 		IndirectlyCopyable<iterator_t<Rng>, __f<O>> &&
 		IndirectRelation<
 			equal_to<>, projected<iterator_t<Rng>, Proj>, const T1*>

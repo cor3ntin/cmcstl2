@@ -41,7 +41,7 @@ STL2_OPEN_NAMESPACE {
 
 				static constexpr std::size_t size() noexcept { return ~std::size_t{0}; }
 
-				template<OutputIterator<result_type> I>
+				template<WritableIterator<result_type> I>
 				void param(I) noexcept {}
 			};
 		}

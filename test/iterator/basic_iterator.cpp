@@ -541,7 +541,7 @@ void test_back_inserter() {
 	static_assert(ranges::Same<ranges::iter_difference_t<I>, std::ptrdiff_t>);
 	static_assert(ranges::Same<ranges::iter_reference_t<I>, I&>);
 	static_assert(!ranges::Readable<I>);
-	static_assert(ranges::OutputIterator<I, int>);
+	static_assert(ranges::WritableIterator<I, int>);
 	static_assert(!ranges::InputIterator<I>);
 	static_assert(!ranges::EqualityComparable<I>);
 	ranges::copy_n(always_iterator<int, 42>{}, 13, i);

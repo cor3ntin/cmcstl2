@@ -27,7 +27,7 @@
 #include <functional>
 
 STL2_OPEN_NAMESPACE {
-	template <InputRange R, CopyConstructible F>
+	template <ReadableRange R, CopyConstructible F>
 	requires View<R> && Invocable<F&, iter_reference_t<iterator_t<R>>>
 	class transform_view : public view_interface<transform_view<R, F>> {
 	private:
@@ -41,7 +41,7 @@ STL2_OPEN_NAMESPACE {
 		constexpr transform_view(R base, F fun)
 		: base_(std::move(base)), fun_(std::move(fun)) {}
 
-		template <InputRange O>
+		template <ReadableRange O>
 		requires ViewableRange<O> && _ConstructibleFromRange<R, O>
 		constexpr transform_view(O&& o, F fun)
 		: base_(view::all(std::forward<O>(o))), fun_(std::move(fun)) {}
@@ -261,7 +261,7 @@ STL2_OPEN_NAMESPACE {
 
 	namespace view {
 		struct __transform_fn {
-			template <InputRange Rng, CopyConstructible F>
+			template <ReadableRange Rng, CopyConstructible F>
 			requires
 				ViewableRange<Rng> && Invocable<F&, iter_reference_t<iterator_t<Rng>>>
 			constexpr auto operator()(Rng&& rng, F fun) const {

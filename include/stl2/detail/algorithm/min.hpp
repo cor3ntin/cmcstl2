@@ -24,7 +24,7 @@
 //
 STL2_OPEN_NAMESPACE {
 	namespace __min {
-		template <InputRange Rng, class Comp = less<>, class Proj = identity>
+		template <ReadableRange Rng, class Comp = less<>, class Proj = identity>
 		requires
 			Copyable<iter_value_t<iterator_t<Rng>>> &&
 			IndirectStrictWeakOrder<
@@ -56,7 +56,7 @@ STL2_OPEN_NAMESPACE {
 		return __invoke::impl(comp, __invoke::impl(proj, b), __invoke::impl(proj, a)) ? b : a;
 	}
 
-	template <InputRange Rng, class Comp = less<>, class Proj = identity>
+	template <ReadableRange Rng, class Comp = less<>, class Proj = identity>
 	requires
 		Copyable<iter_value_t<iterator_t<Rng>>> &&
 		IndirectStrictWeakOrder<

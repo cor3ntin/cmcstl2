@@ -18,7 +18,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // fill [alg.fill]
 STL2_OPEN_NAMESPACE {
-	template <class T, OutputIterator<const T&> O, Sentinel<O> S>
+	template <class T, WritableIterator<const T&> O, Sentinel<O> S>
 	O fill(O first, S last, const T& value)
 	{
 		for (; first != last; ++first) {

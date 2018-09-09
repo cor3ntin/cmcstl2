@@ -12,7 +12,7 @@
 //
 #include "validate.hpp"
 
-#if VALIDATE_RANGES
+#ifdef VALIDATE_RANGES
 #include <range/v3/utility/iterator_concepts.hpp>
 #include <range/v3/utility/iterator_traits.hpp>
 
@@ -129,12 +129,12 @@ namespace associated_type_test {
 	CONCEPT_ASSERT(!meta::is_trait<ns::iterator_category<iterator<std::output_iterator_tag, false>>>());
 	CONCEPT_ASSERT(!meta::is_trait<ns::iterator_category<iterator<std::output_iterator_tag, true>>>());
 
-	CONCEPT_ASSERT(test<std::input_iterator_tag, false, ns::input_iterator_tag>());
+//	CONCEPT_ASSERT(test<std::input_iterator_tag, false, ns::readable_iterator_tag>());
 	CONCEPT_ASSERT(test<std::forward_iterator_tag, false, ns::forward_iterator_tag>());
 	CONCEPT_ASSERT(test<std::bidirectional_iterator_tag, false, ns::bidirectional_iterator_tag>());
 	CONCEPT_ASSERT(test<std::random_access_iterator_tag, false, ns::random_access_iterator_tag>());
 
-	CONCEPT_ASSERT(test<std::input_iterator_tag, true, ns::input_iterator_tag>());
+//	CONCEPT_ASSERT(test<std::input_iterator_tag, true, ns::readable_iterator_tag>());
 	CONCEPT_ASSERT(test<std::forward_iterator_tag, true, ns::forward_iterator_tag>());
 	CONCEPT_ASSERT(test<std::bidirectional_iterator_tag, true, ns::bidirectional_iterator_tag>());
 	CONCEPT_ASSERT(test<std::random_access_iterator_tag, true, ns::random_access_iterator_tag>());
@@ -150,10 +150,12 @@ namespace associated_type_test {
 	static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<my_wonky_tag2, int>, my_wonky_tag2>::value, "");
 	static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<my_wonky_tag2, int&>, my_wonky_tag2>::value, "");
 	struct my_wonky_tag3 : ns::random_access_iterator_tag {};
-	static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<my_wonky_tag3, int>, std::input_iterator_tag>::value, "");
+	//TODO ! MOVE_ONLY
+	//static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<my_wonky_tag3, int>, std::input_iterator_tag>::value, "");
 	static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<my_wonky_tag3, int&>, std::random_access_iterator_tag>::value, "");
-	static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<ns::input_iterator_tag, int>, std::input_iterator_tag>::value, "");
-	static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<ns::input_iterator_tag, int&>, std::input_iterator_tag>::value, "");
+	//TODO ! MOVE_ONLY
+	//static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<ns::input_iterator_tag, int>, std::input_iterator_tag>::value, "");
+	//static_assert(std::is_same<ns::detail::stl2_to_std_iterator_category<ns::input_iterator_tag, int&>, std::input_iterator_tag>::value, "");
 } // namespace associated_type_test
 
 namespace readable_test {
@@ -227,6 +229,16 @@ CONCEPT_ASSERT(ranges::Incrementable<int*>);
 CONCEPT_ASSERT(ranges::Incrementable<const int*>);
 
 namespace iterator_sentinel_test {
+	
+	CONCEPT_ASSERT(ranges::Iterator<int*>);
+	CONCEPT_ASSERT(ranges::Iterator<const int*>);
+	CONCEPT_ASSERT(!ranges::Iterator<void*>);
+	CONCEPT_ASSERT(ranges::Iterator<int*>);
+	CONCEPT_ASSERT(ranges::Sentinel<int*, int*>);
+	CONCEPT_ASSERT(ranges::Sentinel<const int*, const int*>);
+	CONCEPT_ASSERT(ranges::Sentinel<const int*, int*>);
+	CONCEPT_ASSERT(!ranges::Sentinel<void*, void*>);
+
 	struct A {
 		using difference_type = signed char;
 		using iterator_category = ns::input_iterator_tag;
@@ -239,20 +251,63 @@ namespace iterator_sentinel_test {
 		bool operator == (const A&) const;
 		bool operator != (const A&) const;
 	};
-
-	CONCEPT_ASSERT(ranges::Iterator<int*>);
-	CONCEPT_ASSERT(ranges::Iterator<const int*>);
-	CONCEPT_ASSERT(!ranges::Iterator<void*>);
+	
 	CONCEPT_ASSERT(ranges::Iterator<A>);
-	CONCEPT_ASSERT(ranges::InputIterator<A>);
-
-	CONCEPT_ASSERT(ranges::Iterator<int*>);
-	CONCEPT_ASSERT(ranges::Sentinel<int*, int*>);
-	CONCEPT_ASSERT(ranges::Sentinel<const int*, const int*>);
-	CONCEPT_ASSERT(ranges::Sentinel<const int*, int*>);
-	CONCEPT_ASSERT(!ranges::Sentinel<void*, void*>);
+	CONCEPT_ASSERT(ranges::ReadableIterator<A>);
+	CONCEPT_ASSERT(!ranges::InputIterator<A>);
 	CONCEPT_ASSERT(ranges::Sentinel<A, A>);
+
 } // namespace iterator_sentinel_test
+
+namespace io_iterator_tests {
+	struct MoveOnly {
+		using difference_type = signed char;
+		using iterator_category = ns::input_iterator_tag;
+		using value_type = double;
+	
+		MoveOnly& operator++();
+		void operator++(int);
+		double operator*() const;
+	
+		bool operator == (const MoveOnly&) const;
+		bool operator != (const MoveOnly&) const;
+		
+		MoveOnly() = default;
+		MoveOnly(const MoveOnly&) = delete;
+		MoveOnly(MoveOnly&&) = default;
+		MoveOnly& operator=(MoveOnly &&) = default;
+	};
+	
+	CONCEPT_ASSERT(ranges::Iterator<MoveOnly>);
+	CONCEPT_ASSERT(ranges::ReadableIterator<MoveOnly>);
+	CONCEPT_ASSERT(ranges::InputIterator<MoveOnly>);
+	CONCEPT_ASSERT(!ranges::WritableIterator<MoveOnly, double>);
+	CONCEPT_ASSERT(!ranges::ForwardIterator<MoveOnly>);
+	CONCEPT_ASSERT(ranges::Sentinel<MoveOnly, MoveOnly>);
+	
+	struct Out {
+		using difference_type = signed char;
+		using iterator_category = ns::input_iterator_tag;
+		using value_type = double;
+	
+		Out& operator++();
+		void operator++(int);
+		double & operator*();
+	
+		bool operator == (const Out&) const;
+		bool operator != (const Out&) const;
+		
+		Out() = default;
+		Out(const Out&) = delete;
+		Out(Out&&) = default;
+		Out& operator=(Out &&) = default;
+	};
+	
+	CONCEPT_ASSERT(ranges::Iterator<Out>);
+	CONCEPT_ASSERT(ranges::WritableIterator<Out, double>);
+	CONCEPT_ASSERT(!ranges::ForwardIterator<Out>);
+	CONCEPT_ASSERT(ranges::Sentinel<Out, Out>);
+} // namespace io_iterator_tests
 
 namespace indirectly_callable_test {
 	CONCEPT_ASSERT(ranges::ext::IndirectInvocable<std::plus<int>, int*, int*>);

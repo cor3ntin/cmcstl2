@@ -29,6 +29,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // Iterator concepts [iterator.requirements]
 //
+
 STL2_OPEN_NAMESPACE {
 	namespace detail {
 		template <class T>
@@ -349,7 +350,9 @@ STL2_OPEN_NAMESPACE {
 	// Extension: contiguous_iterator_tag for denoting contiguous iterators.
 	//
 	struct output_iterator_tag {};
+	struct move_only_output_iterator_tag : output_iterator_tag {};
 	struct input_iterator_tag {};
+	struct move_only_input_iterator_tag : input_iterator_tag {};
 	struct forward_iterator_tag : input_iterator_tag {};
 	struct bidirectional_iterator_tag : forward_iterator_tag {};
 	struct random_access_iterator_tag : bidirectional_iterator_tag {};
@@ -430,7 +433,8 @@ STL2_OPEN_NAMESPACE {
 	template <class S, class I>
 	concept bool Sentinel =
 		Iterator<I> &&
-		Semiregular<S> &&
+		DefaultConstructible<S> &&
+		Movable<S> &&
 		WeaklyEqualityComparable<S, I>;
 		// Axiom: if [i,s) denotes a range then:
 		//        * i == s is well-defined
@@ -465,19 +469,24 @@ STL2_OPEN_NAMESPACE {
 			//        * if -N is representable by iter_difference_t<I> then
 			//          i - s is well-defined and equal to -N
 		};
+	
+	template <class I, class T>
+	concept bool WritableIterator =
+		Iterator<I> &&
+		Writable<I, T> /*&&
+		requires(I& i, T&& t) {
+			*i = std::forward<T>(t);
+		}*/;
+		
 
 	///////////////////////////////////////////////////////////////////////////
 	// OutputIterator [iterators.output]
 	//
 	template <class I, class T>
 	concept bool OutputIterator =
-		Iterator<I> &&
-		MovableNotCopyable<I> &&
-		Writable<I, T> &&
-		requires(I& i, T&& t) {
-			*i++ = std::forward<T>(t);
-		};
-
+		WritableIterator<I, T> &&
+		MovableNotCopyable<I>;
+		
 	///////////////////////////////////////////////////////////////////////////
 	// InputIterator [iterators.input]
 	//
@@ -494,7 +503,6 @@ STL2_OPEN_NAMESPACE {
 		requires(I& i, const I& ci) {
 			typename iterator_category_t<I>;
 			DerivedFrom<iterator_category_t<I>, input_iterator_tag>;
-			i++;
 		};
 
 
@@ -559,12 +567,12 @@ STL2_OPEN_NAMESPACE {
 	///////////////////////////////////////////////////////////////////////////
 	// iterator_traits [iterator.assoc]
 	//
-	template <InputIterator I>
+	template <ReadableIterator I>
 	struct __pointer_type {
 		using type = add_pointer_t<iter_reference_t<I>>;
 	};
 
-	template <InputIterator I>
+	template <ReadableIterator I>
 	requires
 		requires(I i) {
 			{ i.operator->() } -> auto&&;
@@ -582,10 +590,10 @@ STL2_OPEN_NAMESPACE {
 		using value_type = void;
 		using reference = void;
 		using pointer = void;
-		using iterator_category = output_iterator_tag;
 	};
 
-	InputIterator{I}
+	//A readable iterator has no iterator category ?
+	ReadableIterator{I}
 	struct __iterator_traits<I> {
 		using difference_type = iter_difference_t<I>;
 		using value_type = iter_value_t<I>;
@@ -605,6 +613,8 @@ STL2_OPEN_NAMESPACE {
 			template <class Ref, class Cat> Cat g(std::input_iterator_tag*, Cat*);
 			template <class Ref, class Cat> Cat g(std::output_iterator_tag*, Cat*);
 			template <class Ref, class Cat> std::input_iterator_tag g(void*, Cat*, Ref* = 0);
+			template <class Ref> std::output_iterator_tag g(const void*, move_only_output_iterator_tag*);
+			template <class Ref> std::input_iterator_tag g(const void*, move_only_input_iterator_tag*);
 			template <class Ref> std::input_iterator_tag g(const void*, input_iterator_tag*);
 			template <class Ref> std::forward_iterator_tag g(const void*, forward_iterator_tag*);
 			template <class Ref> std::bidirectional_iterator_tag g(const void*, bidirectional_iterator_tag*);
@@ -658,12 +668,12 @@ namespace std {
 		using iterator_category = std::output_iterator_tag;
 	};
 
-	template <::__stl2::InputIterator In>
+	template <::__stl2::ReadableIterator In>
 	requires
 		!::__stl2::detail::LooksLikeSTL1Iterator<In>
 	struct iterator_traits<In> { };
 
-	template <::__stl2::InputIterator In>
+	template <::__stl2::ReadableIterator In>
 	requires
 		!::__stl2::detail::LooksLikeSTL1Iterator<In> &&
 		::__stl2::Sentinel<In, In>

@@ -52,7 +52,7 @@ STL2_OPEN_NAMESPACE {
 		return __stl2::copy(std::move(first1), std::move(last1), std::move(result));
 	}
 
-	template <InputRange Rng1, InputRange Rng2, class O, class Comp = less<>,
+	template <ReadableRange Rng1, ReadableRange Rng2, class O, class Comp = less<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		WeaklyIncrementable<__f<O>> &&

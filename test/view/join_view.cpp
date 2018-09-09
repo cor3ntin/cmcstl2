@@ -42,7 +42,7 @@ int main()
 			| view::transform([](int i) {return view::iota(0,i);})
 			| view::join;
 		CHECK_EQUAL(rng, {0,0,1,0,1,2});
-		static_assert(InputRange<decltype(rng)>);
+		static_assert(ReadableRange<decltype(rng)>);
 		static_assert(!Range<const decltype(rng)>);
 		static_assert(!ForwardRange<decltype(rng)>);
 		static_assert(!CommonRange<decltype(rng)>);
@@ -54,7 +54,7 @@ int main()
 			| view::filter([](auto){ return true; })
 			| view::join;
 		CHECK_EQUAL(rng, {0,0,1,0,1,2});
-		static_assert(InputRange<decltype(rng)>);
+		static_assert(ReadableRange<decltype(rng)>);
 		static_assert(!Range<const decltype(rng)>);
 		static_assert(!ForwardRange<decltype(rng)>);
 		static_assert(!CommonRange<decltype(rng)>);

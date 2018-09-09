@@ -126,7 +126,7 @@ STL2_OPEN_NAMESPACE {
 	//
 	template <class R, class T>
 	concept bool OutputRange =
-		Range<R> && OutputIterator<iterator_t<R>, T>;
+		Range<R> && WritableIterator<iterator_t<R>, T>;
 	
 	template <class T>
 	concept bool ReadableRange =

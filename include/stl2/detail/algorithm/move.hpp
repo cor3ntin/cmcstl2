@@ -32,7 +32,7 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first), std::move(result)};
 	}
 
-	template <InputRange Rng, class O>
+	template <ReadableRange Rng, class O>
 	requires
 		WeaklyIncrementable<__f<O>> &&
 		IndirectlyMovable<iterator_t<Rng>, __f<O>>
@@ -55,7 +55,7 @@ STL2_OPEN_NAMESPACE {
 		}
 
 		// Extension
-		template <InputRange Rng1, Range Rng2>
+		template <ReadableRange Rng1, Range Rng2>
 		requires
 			IndirectlyMovable<iterator_t<Rng1>, iterator_t<Rng2>>
 		tagged_pair<

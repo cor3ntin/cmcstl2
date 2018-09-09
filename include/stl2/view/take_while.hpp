@@ -28,7 +28,7 @@
 STL2_OPEN_NAMESPACE {
 	namespace ext {
 		template <View R, class Pred>
-		requires InputRange<R> && std::is_object_v<Pred> &&
+		requires ReadableRange<R> && std::is_object_v<Pred> &&
 			IndirectUnaryPredicate<const Pred, iterator_t<R>>
 		class take_while_view
 		: public view_interface<take_while_view<R, Pred>>

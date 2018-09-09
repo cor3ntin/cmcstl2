@@ -77,28 +77,28 @@ STL2_OPEN_NAMESPACE {
 			constexpr explicit __view_closure(Fn, Ts&&... ts)
 			: __box<Is, Ts>{std::forward<Ts>(ts)}... {}
 
-			template <InputRange Rng>
+			template <ReadableRange Rng>
 			requires ViewableRange<Rng> && Invocable<Fn, Rng, Ts...> &&
 				View<std::invoke_result_t<Fn, Rng, Ts...>>
 			constexpr auto operator()(Rng&& rng) && {
 				return Fn{}(std::forward<Rng>(rng),
 					static_cast<__box<Is, Ts>&&>(*this).value_...);
 			}
-			template <InputRange Rng>
+			template <ReadableRange Rng>
 			requires ViewableRange<Rng> && Invocable<Fn, Rng, Ts &...> &&
 				View<std::invoke_result_t<Fn, Rng, Ts &...>>
 			constexpr auto operator()(Rng&& rng) & {
 				return Fn{}(std::forward<Rng>(rng),
 					static_cast<__box<Is, Ts>&>(*this).value_...);
 			}
-			template <InputRange Rng>
+			template <ReadableRange Rng>
 			requires ViewableRange<Rng> && Invocable<Fn, Rng, const Ts &...> &&
 				View<std::invoke_result_t<Fn, Rng, const Ts &...>>
 			constexpr auto operator()(Rng&& rng) const & {
 				return Fn{}(std::forward<Rng>(rng),
 					static_cast<const __box<Is, Ts>&>(*this).value_...);
 			}
-			template <InputRange Rng>
+			template <ReadableRange Rng>
 			requires ViewableRange<Rng> && Invocable<Fn, Rng, const Ts &...> &&
 				View<std::invoke_result_t<Fn, Rng, const Ts &...>>
 			constexpr auto operator()(Rng&& rng) const && = delete;

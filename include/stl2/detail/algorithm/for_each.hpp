@@ -34,7 +34,7 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first), std::move(fun)};
 	}
 
-	template <InputRange Rng, class F, class Proj = identity>
+	template <ReadableRange Rng, class F, class Proj = identity>
 	requires
 		IndirectUnaryInvocable<F, projected<iterator_t<Rng>, Proj>>
 	tagged_pair<tag::in(safe_iterator_t<Rng>), tag::fun(F)>

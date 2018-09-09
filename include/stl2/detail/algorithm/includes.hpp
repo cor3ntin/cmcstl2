@@ -47,7 +47,7 @@ STL2_OPEN_NAMESPACE {
 		}
 	}
 
-	template <InputRange Rng1, InputRange Rng2, class Comp = less<>,
+	template <ReadableRange Rng1, ReadableRange Rng2, class Comp = less<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectStrictWeakOrder<Comp,

@@ -40,7 +40,7 @@ STL2_OPEN_NAMESPACE {
 		return true;
 	}
 
-	template <InputRange R, class Pred, class Proj = identity>
+	template <ReadableRange R, class Pred, class Proj = identity>
 	requires
 		IndirectUnaryPredicate<
 			Pred, projected<iterator_t<R>, Proj>>

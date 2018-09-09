@@ -108,7 +108,7 @@ STL2_OPEN_NAMESPACE {
 			std::ref(proj));
 	}
 
-	template <InputRange Rng, WeaklyIncrementable O, class R = equal_to<>,
+	template <ReadableRange Rng, WeaklyIncrementable O, class R = equal_to<>,
 		class Proj = identity>
 	requires
 		IndirectlyCopyable<iterator_t<Rng>, O> &&

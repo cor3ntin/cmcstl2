@@ -44,7 +44,7 @@ STL2_OPEN_NAMESPACE {
 		return {std::move(first), std::move(result)};
 	}
 
-	template <InputRange Rng, class O, class Pred, class Proj = identity>
+	template <ReadableRange Rng, class O, class Pred, class Proj = identity>
 	requires
 		WeaklyIncrementable<__f<O>> &&
 		IndirectUnaryPredicate<

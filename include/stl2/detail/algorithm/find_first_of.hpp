@@ -43,7 +43,7 @@ STL2_OPEN_NAMESPACE {
 		return first1;
 	}
 
-	template <InputRange Rng1, ForwardRange Rng2, class Pred = equal_to<>,
+	template <ReadableRange Rng1, ForwardRange Rng2, class Pred = equal_to<>,
 		class Proj1 = identity, class Proj2 = identity>
 	requires
 		IndirectRelation<Pred,

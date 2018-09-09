@@ -29,14 +29,14 @@ STL2_OPEN_NAMESPACE {
 	concept bool _TinyRange =
 		SizedRange<R> && std::remove_reference_t<R>::size() <= 1;
 
-	template <InputRange Rng>
+	template <ReadableRange Rng>
 	struct __split_view_base {
 		iterator_t<Rng> current_ {};
 	};
 	template <ForwardRange Rng>
 	struct __split_view_base<Rng> {};
 
-	template <InputRange Rng, ForwardRange Pattern>
+	template <ReadableRange Rng, ForwardRange Pattern>
 	requires View<Rng> && View<Pattern> &&
 		IndirectlyComparable<iterator_t<Rng>, iterator_t<Pattern>, equal_to<>> &&
 		(ForwardRange<Rng> || _TinyRange<Pattern>)
@@ -53,7 +53,7 @@ STL2_OPEN_NAMESPACE {
 		: base_(std::move(base))
 		, pattern_(std::move(pattern)) {}
 
-		template <InputRange O, ForwardRange P>
+		template <ReadableRange O, ForwardRange P>
 		requires
 			_ConstructibleFromRange<Rng, O> &&
 			_ConstructibleFromRange<Pattern, P>
@@ -61,7 +61,7 @@ STL2_OPEN_NAMESPACE {
 		: base_(view::all(std::forward<O>(o)))
 		, pattern_(view::all(std::forward<P>(p))) {}
 
-		template <InputRange O>
+		template <ReadableRange O>
 		requires
 			_ConstructibleFromRange<Rng, O> &&
 			Constructible<Pattern, single_view<iter_value_t<iterator_t<O>>>>
@@ -99,7 +99,7 @@ STL2_OPEN_NAMESPACE {
 	template <class Rng, class Pattern>
 	split_view(Rng&&, Pattern&&) -> split_view<all_view<Rng>, all_view<Pattern>>;
 
-	template <InputRange Rng>
+	template <ReadableRange Rng>
 	split_view(Rng&&, iter_value_t<iterator_t<Rng>>)
 		-> split_view<all_view<Rng>, single_view<iter_value_t<iterator_t<Rng>>>>;
 
