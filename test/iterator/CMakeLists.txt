@@ -28,3 +28,4 @@ add_stl2_test(test.iterator.any iter.any any_iterator.cpp)
 target_compile_options(iter.any PRIVATE
     $<$<AND:$<CXX_COMPILER_ID:GNU>,$<VERSION_GREATER_EQUAL:$<CXX_COMPILER_VERSION>,7.0>,$<VERSION_LESS:$<CXX_COMPILER_VERSION>,7.2>>:
     -Wno-error=strict-aliasing>)
+add_stl2_test(test.iterator.tagless tagless tagless.cpp)

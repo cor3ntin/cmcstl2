@@ -333,8 +333,10 @@ STL2_OPEN_NAMESPACE {
 	template<class> struct iterator_category {};
 
 	template<class T>
-	struct iterator_category<T*>
-	: std::enable_if<std::is_object<T>::value, contiguous_iterator_tag> {};
+	requires std::is_object_v<T>
+	struct iterator_category<T*> {
+		using type = contiguous_iterator_tag;
+	};
 
 	template<class T>
 	struct iterator_category<const T>
@@ -359,6 +361,25 @@ STL2_OPEN_NAMESPACE {
 
 	template<class T>
 	using iterator_category_t = meta::_t<iterator_category<T>>;
+
+
+	namespace detail {
+		template <typename T, typename default_tag = input_iterator_tag>
+		struct iterator_tag {
+			using type = default_tag;
+		};
+
+		template <typename T, typename default_tag>
+		requires requires {
+			typename iterator_category_t<T>;
+		}
+		struct iterator_tag<T, default_tag> {
+			using type = iterator_category_t<T>;
+		};
+
+		template<class T, typename default_tag>
+		using iterator_tag_t = meta::_t<iterator_tag<T, default_tag>>;
+	}
 
 	////////////////////////////////////////////////////////////////////////////
 	// Iterator [iterators.iterator]
@@ -437,9 +458,8 @@ STL2_OPEN_NAMESPACE {
 	META_CONCEPT InputIterator =
 		Iterator<I> &&
 		Readable<I> &&
+		DerivedFrom<detail::iterator_tag_t<I, input_iterator_tag>, input_iterator_tag> &&
 		requires(I& i, const I& ci) {
-			typename iterator_category_t<I>;
-			DerivedFrom<iterator_category_t<I>, input_iterator_tag>;
 			i++;
 		};
 
@@ -452,12 +472,13 @@ STL2_OPEN_NAMESPACE {
 	////////////////////////////////////////////////////////////////////////////
 	// ForwardIterator [iterators.forward]
 	//
+
 	template<class I>
 	META_CONCEPT ForwardIterator =
 		InputIterator<I> &&
-		DerivedFrom<iterator_category_t<I>, forward_iterator_tag> &&
 		Incrementable<I> &&
-		Sentinel<I, I>;
+		Sentinel<I, I> &&
+		DerivedFrom<detail::iterator_tag_t<I, forward_iterator_tag>, forward_iterator_tag>;
 		// Axiom: I{} is equality-preserving and non-singular
 		// Axiom: if i equals j then i and j denote the same element.
 		// Axiom: if [i,s) denotes a range && bool(i != s) then [i,i+1) denotes
@@ -472,8 +493,8 @@ STL2_OPEN_NAMESPACE {
 	template<class I>
 	META_CONCEPT BidirectionalIterator =
 		ForwardIterator<I> &&
-		DerivedFrom<iterator_category_t<I>, bidirectional_iterator_tag> &&
-		ext::Decrementable<I>;
+		ext::Decrementable<I> &&
+		DerivedFrom<detail::iterator_tag_t<I, bidirectional_iterator_tag>, bidirectional_iterator_tag>;
 
 	////////////////////////////////////////////////////////////////////////////
 	// RandomAccessIterator [iterators.random.access]
@@ -481,11 +502,11 @@ STL2_OPEN_NAMESPACE {
 	template<class I>
 	META_CONCEPT RandomAccessIterator =
 		BidirectionalIterator<I> &&
-		DerivedFrom<iterator_category_t<I>, random_access_iterator_tag> &&
 		SizedSentinel<I, I> &&
 		// Should ordering be in SizedSentinel and/or RandomAccessIncrementable?
 		StrictTotallyOrdered<I> &&
 		ext::RandomAccessIncrementable<I> &&
+		DerivedFrom<detail::iterator_tag_t<I, random_access_iterator_tag>, random_access_iterator_tag> &&
 		requires(const I& ci, const iter_difference_t<I> n) {
 			ci[n];
 			requires Same<decltype(ci[n]), iter_reference_t<I>>;
@@ -502,9 +523,12 @@ STL2_OPEN_NAMESPACE {
 	template<class I>
 	META_CONCEPT ContiguousIterator =
 		RandomAccessIterator<I> &&
-		DerivedFrom<iterator_category_t<I>, contiguous_iterator_tag> &&
 		std::is_lvalue_reference<iter_reference_t<I>>::value &&
-		Same<iter_value_t<I>, __uncvref<iter_reference_t<I>>>;
+		Same<iter_value_t<I>, __uncvref<iter_reference_t<I>>> &&
+		(
+			DerivedFrom<detail::iterator_tag_t<I, input_iterator_tag>, contiguous_iterator_tag> ||
+			ConvertibleTo<I, std::add_const_t<iter_value_t<I>>*>
+		);
 
 	////////////////////////////////////////////////////////////////////////////
 	// iterator_traits [iterator.assoc]

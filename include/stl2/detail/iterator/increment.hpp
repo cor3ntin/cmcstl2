@@ -65,7 +65,7 @@ STL2_OPEN_NAMESPACE {
 	//
 	template<class I>
 	META_CONCEPT WeaklyIncrementable =
-		Semiregular<I> &&
+		Movable<I> &&
 		requires(I i) {
 			typename iter_difference_t<I>;
 			requires SignedIntegral<iter_difference_t<I>>;
